@@ -1,39 +1,37 @@
 # BankSim - Simulador Bancário
 
-Simulador bancário em JavaScript, executado no terminal com Node.js, criado para praticar lógica de programação.
+Um simulador bancário que roda no terminal, feito com JavaScript e Node.js. Fiz esse projeto para praticar lógica de programação.
 
-## Trajetória
+## Como cheguei até aqui
 
-O BankSim nasceu como projeto de prática depois dos cursos de JavaScript que fiz na **Alura**. Em vez de continuar só com exercícios isolados, quis juntar o que aprendi em um programa único, com regras reais para resolver. Um simulador bancário foi uma boa escolha, porque exige validar dados, tomar decisões e organizar informações em estruturas.
+Fiz os cursos de JavaScript da Alura e, depois de estudar o conteúdo, senti que só os exercícios não bastavam. Eu queria juntar tudo em um projeto de verdade, com regras para resolver e erros para corrigir. Escolhi um simulador bancário porque ele me obriga a validar dados, tomar decisões e organizar informações.
 
-Os conteúdos estudados nos cursos foram:
+O que eu estudei nos cursos:
 
-- **Variáveis:** `var`, `let` e `const`, e a diferença de escopo entre elas
+- **Variáveis:** `var`, `let` e `const`
 - **Tipos de dados:** `string`, `number`, `boolean`, `undefined`, `null`, `object`, `bigint` e `symbol`
-- **Operadores:** aritméticos, de atribuição, de comparação (`==` e `===`) e lógicos (`&&`, `||`, `!`)
+- **Operadores:** aritméticos, de atribuição, de comparação e lógicos
 - **Condicionais:** `if`, `else if`, `else`, `switch` e operador ternário
 - **Laços:** `for`, `while`, `do...while`, `for...of` e `for...in`
-- **Funções:** declaração, expressão e *arrow function*, com parâmetros e retorno
-- **Arrays e objetos:** criação, acesso e alteração de elementos e propriedades
+- **Funções:** declaração, expressão e *arrow function*
+- **Arrays e objetos:** criação, acesso e alteração
 - **Métodos nativos:**
   - de array: `push`, `pop`, `shift`, `unshift`, `splice`, `slice`, `find`, `findIndex`, `filter`, `map`, `reduce`, `forEach`, `includes`, `sort` e `join`
   - de número e data: `toFixed`, `Number.isFinite` e `Date`
 
-## Funcionalidades
+Durante o desenvolvimento eu errei bastante. Troquei `||` por `&&`, usei variável fora do escopo e comparei textos escritos de jeito diferente. Foi corrigindo cada um desses erros que os conceitos realmente fixaram.
 
-- Consultar saldo e limite
-- Depositar e sacar (a conta corrente pode usar o limite)
-- Exibir extrato e filtrar movimentações por tipo
-- Transferir entre contas
-- Criar e excluir contas, com validação dos dados
+## O que o projeto faz
 
-## Tecnologias
+- Consulta saldo e limite
+- Deposita e saca (a conta corrente pode usar o limite)
+- Mostra o extrato e filtra as movimentações por tipo
+- Transfere dinheiro entre contas
+- Cria e exclui contas, validando os dados
 
-JavaScript e Node.js, sem bibliotecas externas.
+## Como rodar
 
-## Como executar
-
-Não há dependências para instalar (sem `npm install`). É necessário apenas ter o [Node.js](https://nodejs.org) (versão LTS).
+Não precisa instalar nenhuma dependência, só ter o [Node.js](https://nodejs.org) (versão LTS) na máquina.
 
 ```bash
 git clone <link-do-repositorio>
@@ -54,38 +52,28 @@ O novo saldo é de: R$ 2025
 21/10/2026, 20:36:24 | Saque | R$ 200.00
 ```
 
-## Estrutura do código
+## Como o código está organizado
 
-O arquivo `banksim.js` é dividido em seções:
+O arquivo `banksim.js` tem cinco partes:
 
-1. **Dados:** array de contas e conta ativa
-2. **Menu de operações:** objeto com as opções disponíveis
-3. **Funções do sistema:** regras de cada operação
-4. **Processamento:** `switch` que direciona cada opção para sua função
-5. **Execução:** demonstração que roda as operações em sequência
+1. **Dados:** o array de contas e a conta ativa
+2. **Menu de operações:** o objeto com as opções
+3. **Funções do sistema:** a regra de cada operação
+4. **Processamento:** o `switch` que chama a função de cada opção
+5. **Execução:** uma demonstração que roda as operações em sequência
 
-## Regras de negócio
+## Regras que implementei
 
-- O limite vale para saques e transferências (disponível = saldo + limite)
-- Não é possível transferir para a mesma conta nem para contas inexistentes
-- Não é possível excluir uma conta com saldo diferente de zero ou que esteja em uso
-- Números de conta não podem se repetir
+- O limite vale para saque e transferência (disponível = saldo + limite)
+- Não dá para transferir para a mesma conta nem para uma conta que não existe
+- Não dá para excluir uma conta com saldo diferente de zero ou que esteja em uso
+- O número da conta não pode se repetir
 
-## Conceitos praticados
+## O que ainda falta
 
-- Variáveis (`const` e `let`), objetos e arrays
-- Funções, parâmetros e retorno antecipado (*early return*)
-- Condicionais e `switch`
-- Métodos de array: `find`, `findIndex`, `filter`, `forEach`, `push` e `splice`
-- Validação de dados (`Number.isFinite`, `trim`)
-- Template strings e datas (`Date`, `toLocaleString`)
-
-## Limitações e próximos passos
-
-- Os valores das operações são fixos no código (sem entrada do usuário via `readline`)
-- Desfazer última movimentação não foi implementado
-- Poupança com limite maior que 0 ainda é aceita na criação de conta
+- Estudar Programação Orientada a Objetos (POO) de JavaScript
+- Refatorar o código para um novo arquivo, para assim por em prática os meus conhecimentos de POO
 
 ## Autor
 
-Henrique Yamada
+Henrique Yuji Yamada
