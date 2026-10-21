@@ -22,6 +22,11 @@ const operacoes = {
     DEPOSITAR: 2,
     SACAR: 3,
     EXTRATO: 4,
+    FILTRAR: 5,
+    TRANSFERIR: 6,
+    DESFAZER_ULTIMA_MOVIMENTACAO: 7,
+    CRIAR_CONTA: 8,
+    EXCLUIR_CONTA: 9,
     ENCERRAR: 0
 };
 
@@ -53,6 +58,7 @@ function consultarSaldo() {
 function realizarDeposito(valor) {
     if (Number.isFinite(valor) && valor > 0) {
         conta.saldo += valor;
+        registrarMovimentacao("Depósito", valor);
         console.log("O seu novo saldo é de: R$", conta.saldo);
     } else {
         console.log("Você não pode depositar um valor igual a 0 ou menor.");
@@ -60,31 +66,49 @@ function realizarDeposito(valor) {
 }
 
 function realizarSaque(valor) {
-    if (Number.isFinite(valor) && valor > -1) {
-        if (conta.saldo > valor) {
-            if (conta.limite > valor) {
-                conta.saldo -= valor;
-                console.log("O novo saldo é de: R$", conta.saldo);
-            } else {
-                console.log("Você não pode sacar um valor maior que o que está no seu limite.");    
-            }
-        } else {
-            console.log("Você não pode sacar um valor menor que o que está no seu saldo.");
-        }
-    } else {
-        console.log("Você não pode sacar um valor igual a 0 ou menor.");
+    if (!Number.isFinite(valor) || valor <= 0) {
+        console.log("Valor de saque inválido.");
+        return;
     }
+
+    if (valor > conta.saldo + conta.limite) {
+        console.log("Saldo e limite insuficientes.");
+        return;
+    }
+
+    conta.saldo -= valor;
+    registrarMovimentacao("Saque", valor);
+    console.log("O novo saldo é de: R$", conta.saldo);
 }
 
 function exibirExtrato() {
     // IMPLEMENTAR:
     // Percorrer o histórico e exibir as movimentações.
+
+    console.log("\n====== EXTRATO ======");
+
+    if (conta.historico.length === 0) {
+        console.log("Nenhuma movimentação registrada.");
+        return;
+    }
+
+    conta.historico.forEach(item => {
+        console.log(`${item.data} | ${item.tipo} | R$ ${item.valor.toFixed(2)}`);
+    });
 }
 
 function registrarMovimentacao(tipo, valor) {
     // IMPLEMENTAR:
     // Criar um objeto com tipo, valor e data.
     // Adicionar o objeto ao histórico.
+
+    const movimentacao = {
+        tipo: tipo,
+        valor: valor,
+        data: new Date().toLocaleString('pt-BR'),
+    }
+
+    conta.historico.push(movimentacao);
 }
 
 function processarOperacao(opcao) {
@@ -102,7 +126,7 @@ function processarOperacao(opcao) {
             break;
 
         case operacoes.EXTRATO:
-            
+            exibirExtrato();
             break;
 
         case operacoes.ENCERRAR:
@@ -120,7 +144,8 @@ function iniciarSistema() {
     // processarOperacao(0);
     // processarOperacao(1);
     // processarOperacao(2);
-    processarOperacao(3);
+    // processarOperacao(3);
+    // processarOperacao(4);
 }
 
 // ========== 5. INICIALIZAÇÃO ==========
