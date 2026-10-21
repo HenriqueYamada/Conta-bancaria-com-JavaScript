@@ -2,6 +2,23 @@
 
 Simulador bancário em JavaScript, executado no terminal com Node.js, criado para praticar lógica de programação.
 
+## Trajetória
+
+O BankSim nasceu como projeto de prática depois dos cursos de JavaScript que fiz na **Alura**. Em vez de continuar só com exercícios isolados, quis juntar o que aprendi em um programa único, com regras reais para resolver. Um simulador bancário foi uma boa escolha, porque exige validar dados, tomar decisões e organizar informações em estruturas.
+
+Os conteúdos estudados nos cursos foram:
+
+- **Variáveis:** `var`, `let` e `const`, e a diferença de escopo entre elas
+- **Tipos de dados:** `string`, `number`, `boolean`, `undefined`, `null`, `object`, `bigint` e `symbol`
+- **Operadores:** aritméticos, de atribuição, de comparação (`==` e `===`) e lógicos (`&&`, `||`, `!`)
+- **Condicionais:** `if`, `else if`, `else`, `switch` e operador ternário
+- **Laços:** `for`, `while`, `do...while`, `for...of` e `for...in`
+- **Funções:** declaração, expressão e *arrow function*, com parâmetros e retorno
+- **Arrays e objetos:** criação, acesso e alteração de elementos e propriedades
+- **Métodos nativos:**
+  - de array: `push`, `pop`, `shift`, `unshift`, `splice`, `slice`, `find`, `findIndex`, `filter`, `map`, `reduce`, `forEach`, `includes`, `sort` e `join`
+  - de número e data: `toFixed`, `Number.isFinite` e `Date`
+
 ## Funcionalidades
 
 - Consultar saldo e limite
