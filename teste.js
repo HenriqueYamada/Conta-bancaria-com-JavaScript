@@ -143,8 +143,6 @@ function filtrarMovimentacoes(conta, tipo) {
     });
 }
 
-// ========== 4. A IMPLEMENTAR ==========
-
 // Move valor da conta de origem para a de destino e registra nas duas.
 function transferir(numeroOrigem, numeroDestino, valor) {
     if (!Number.isFinite(valor) || valor <= 0) {
@@ -182,14 +180,49 @@ function transferir(numeroOrigem, numeroDestino, valor) {
     console.log("Transferência feita com sucesso! A conta ", origem.numero, " possui um saldo de R$", origem.saldo, ", e a conta ", destino.numero, " possui um saldo de R$", destino.saldo);
 }
 
-// Remove a última movimentação da conta ativa e reverte o saldo.
-function desfazerUltimaMovimentacao() {
-    // TODO
-}
+// ========== 4. A IMPLEMENTAR ==========
 
 // Adiciona uma nova conta ao array "contas".
-function criarConta(titular, tipo, saldoInicial) {
-    // TODO
+function criarConta(numero, titular, tipo, saldoInicial, limite) {
+    if (!Number.isFinite(numero)) {
+        console.log("O número ", numero, " não é válido.")
+        return;
+    } else if(buscarContaPorNumero(numero)) {
+        console.log("O número ", numero, " já está sendo utilizado.")
+        return;
+    }
+
+    if (titular.trim() === "") {
+        console.log("O titular está vazio.")
+        return;
+    }
+
+    if (tipo != "corrente" && tipo != "poupanca") {
+        console.log("O tipo ", tipo, " é inválido.")
+        return;
+    }
+
+    if (!Number.isFinite(saldoInicial) || saldoInicial < 0) {
+        console.log("O saldo R$", saldoInicial, " é inválido.")
+        return;
+    }
+
+    if (!Number.isFinite(limite) || limite < 0) {
+        console.log("O limite R$", limite, " é inválido.")
+        return;
+    }
+
+    const Objeto = {
+        numero: numero,
+        titular: titular,
+        tipo: tipo,
+        saldo: saldoInicial,
+        limite: limite,
+        historico: []
+    }
+
+    contas.push(Objeto);
+    console.log("Conta criada com sucesso!");
 }
 
 // Remove a conta do array "contas".
@@ -232,7 +265,24 @@ function processarOperacao(opcao) {
             break;
 
         case operacoes.CRIAR_CONTA:
-            
+            // válidos
+            criarConta(1004, "Ana Costa", "corrente", 200, 300);
+            criarConta(1005, "Beto Dias", "poupanca", 100, 0);
+            criarConta(1006, "Caio Reis", "corrente", 0, 0);
+
+            // Inválidos
+            criarConta(1001, "Repetida", "corrente", 100, 0);      
+            criarConta("abc", "Sem Número", "corrente", 100, 0);   
+            criarConta(1007, "", "corrente", 100, 0);              
+            criarConta(1007, "   ", "corrente", 100, 0);           
+            criarConta(1007, "Dani Melo", "investimento", 100, 0); 
+            criarConta(1007, "Dani Melo", "corrente", -50, 0);     
+            criarConta(1007, "Dani Melo", "corrente", 100, -100);  
+            criarConta(1007, "Dani Melo", "corrente", "100", 0);   
+
+            // Conferência
+            console.log("Total de contas:", contas.length);
+            console.log(contas[contas.length - 1]);
             break;
 
         case operacoes.EXCLUIR_CONTA:
@@ -256,7 +306,8 @@ function iniciarSistema() {
     // processarOperacao(operacoes.EXTRATO);
     // processarOperacao(operacoes.FILTRAR)
     // processarOperacao(operacoes.TRANSFERIR);
-    processarOperacao(operacoes.TRANSFERIR);
+    // processarOperacao(operacoes.CRIAR_CONTA);
+    processarOperacao(operacoes.EXCLUIR_CONTA);
 }   
 
 iniciarSistema();
