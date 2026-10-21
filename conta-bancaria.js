@@ -104,8 +104,32 @@ const roteiro = [
 // ============ EXERCÍCIOS (é com você!) ============
 
 // Ex. 1 (~20 min): o menu
-function exibirMenu() {}        // TODO: título + uma linha por opção ("0 - Sair"), percorrendo opcoesDoMenu
-function executarOperacao(item) {} // TODO: switch em item.opcao; cada case imprime ">> título" e chama a função; default: "Opção inválida"
+function exibirMenu() { // TODO: título + uma linha por opção ("0 - Sair"), percorrendo opcoesDoMenu
+  opcoesDoMenu.forEach(opcao => {
+    console.log("Opção: ", opcao.opcao, " - ", opcao.texto);
+  });
+}
+
+// exibirMenu();
+
+function executarOperacao(item) { // TODO: switch em item.opcao; cada case imprime ">> título" e chama a função; default: "Opção inválida"
+  switch (item.opcao) {
+    case 0:
+      console.log(">> Sair");
+      break;
+    
+    case 1:
+      console.log(">> Imprimir todas as contas");
+      exibirTodasAsContas();
+      break;
+
+    case 2:
+      console.log(">> Consultar conta por número");
+      consultarConta();
+      break;
+  }
+} 
+
 function executarRoteiro() {}   // TODO: exibirMenu() 1x; filtrar passos com ex <= EXERCICIO_ATUAL; do...while até opcao 0; separador "--- Passo N | Opção X ---"
 
 // Ex. 2 (~12 min): imprimir e consultar
@@ -142,5 +166,3 @@ function relatorioDoBanco() {}    // TODO: usa as 3 acima + Object.entries, Obje
 // Bônus
 function contaComMaiorSaldo() {}
 function desfazerUltimaMovimentacao(numero) {}
-
-executarRoteiro(); // não apague
