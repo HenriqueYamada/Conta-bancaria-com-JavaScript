@@ -18,7 +18,7 @@ const contas = [
 
     { 
       numero: 1002, 
-      titular: "Maria Souza", 
+      titular: "Fabiana Freitas", 
       tipo: "poupanca", 
       saldo: 3200.00, 
       limite: 0, 
@@ -46,9 +46,8 @@ const operacoes = {
     EXTRATO: 4,
     FILTRAR: 5,
     TRANSFERIR: 6,
-    DESFAZER_ULTIMA_MOVIMENTACAO: 7,
-    CRIAR_CONTA: 8,
-    EXCLUIR_CONTA: 9,
+    CRIAR_CONTA: 7,
+    EXCLUIR_CONTA: 8,
     ENCERRAR: 0
 };
 
@@ -67,7 +66,6 @@ function exibirMenu() {
     console.log(`${operacoes.EXTRATO} - Exibir extrato`);
     console.log(`${operacoes.FILTRAR} - Filtrar movimentações`);
     console.log(`${operacoes.TRANSFERIR} - Transferir`);
-    console.log(`${operacoes.DESFAZER_ULTIMA_MOVIMENTACAO} - Desfazer última movimentação`);
     console.log(`${operacoes.CRIAR_CONTA} - Criar conta`);
     console.log(`${operacoes.EXCLUIR_CONTA} - Excluir conta`);
     console.log(`${operacoes.ENCERRAR} - Encerrar sistema`);
@@ -131,24 +129,7 @@ function registrarMovimentacao(conta, tipo, valor) {
     });
 }
 
-// ========== 4. A IMPLEMENTAR ==========
-
 // Exibe só as movimentações da conta ativa que atendem ao critério (ex: tipo).
-// function filtrarMovimentacoes(conta, tipo) {
-//     let movimentacaoFiltrada = {};
-
-//     if (conta.historico.length === 0) {
-//         console.log("A lista está vazia");
-//         return;
-//     }
-
-//     movimentacaoFiltrada = conta.historico.filter(n => n.tipo === tipo);
-
-//     movimentacaoFiltrada.forEach(n => {
-//         console.log(`${n.data} | ${n.tipo} | R$ ${n.valor.toFixed(2)}`);
-//     });
-// }
-
 function filtrarMovimentacoes(conta, tipo) {
     const movimentacaoFiltrada = conta.historico.filter(n => n.tipo === tipo);
 
@@ -162,9 +143,43 @@ function filtrarMovimentacoes(conta, tipo) {
     });
 }
 
+// ========== 4. A IMPLEMENTAR ==========
+
 // Move valor da conta de origem para a de destino e registra nas duas.
 function transferir(numeroOrigem, numeroDestino, valor) {
-    // TODO
+    if (!Number.isFinite(valor) || valor <= 0) {
+        console.log("O valor R$", valor, " não pode ser transferido");
+        return;
+    }
+
+    const origem = buscarContaPorNumero(numeroOrigem);
+    const destino = buscarContaPorNumero(numeroDestino);
+
+    if (!origem) {
+        console.log("A conta ", numeroOrigem," não existe");
+        return;
+    } else if (!destino) {
+        console.log("A conta ", numeroDestino," não existe");
+        return;
+    }
+
+    if (numeroOrigem === numeroDestino) {
+        console.log("As contas ", numeroOrigem, " e ", numeroDestino, " são iguais");
+        return;
+    }
+
+    if (valor > origem.saldo + origem.limite) {
+        console.log("O saldo não é suficiente para a conta ", numeroOrigem);
+        return;
+    }
+
+    origem.saldo -= valor;
+    destino.saldo += valor;
+
+    registrarMovimentacao(origem, "Transferência - enviada", valor);
+    registrarMovimentacao(destino, "Transferência - recebida", valor);
+
+    console.log("Transferência feita com sucesso! A conta ", origem.numero, " possui um saldo de R$", origem.saldo, ", e a conta ", destino.numero, " possui um saldo de R$", destino.saldo);
 }
 
 // Remove a última movimentação da conta ativa e reverte o saldo.
@@ -208,11 +223,12 @@ function processarOperacao(opcao) {
             break;
 
         case operacoes.TRANSFERIR:
-            
-            break;
-
-        case operacoes.DESFAZER_ULTIMA_MOVIMENTACAO:
-            
+            transferir(1001, 1002, 250);
+            transferir(9999, 1002, 100);
+            transferir(1001, 9999, 100);
+            transferir(1001, 1001, 100);
+            transferir(1001, 1002, 5000);
+            transferir(1001, 1002, 0);
             break;
 
         case operacoes.CRIAR_CONTA:
@@ -235,10 +251,12 @@ function processarOperacao(opcao) {
 // ========== 6. EXECUÇÃO DO SISTEMA ==========
 
 function iniciarSistema() {
-    processarOperacao(operacoes.DEPOSITAR);
-    processarOperacao(operacoes.SACAR);
+    // processarOperacao(operacoes.DEPOSITAR);
+    // processarOperacao(operacoes.SACAR);
     // processarOperacao(operacoes.EXTRATO);
     // processarOperacao(operacoes.FILTRAR)
+    // processarOperacao(operacoes.TRANSFERIR);
+    processarOperacao(operacoes.TRANSFERIR);
 }   
 
 iniciarSistema();
