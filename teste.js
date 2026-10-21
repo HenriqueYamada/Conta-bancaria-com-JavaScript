@@ -4,16 +4,38 @@
  * Objetivo: praticar lógica de programação.
  */
 
-// ========== 1. DADOS DA CONTA ==========
+// ========== 1. DADOS ==========
 
-const conta = {
-    numero: 1001,
-    titular: "Henrique Yamada",
-    tipo: "corrente",
-    saldo: 1500.00,
-    limite: 500.00,
-    historico: []
-};
+const contas = [
+    { 
+      numero: 1001, 
+      titular: "Henrique Yamada", 
+      tipo: "corrente", 
+      saldo: 1500.00, 
+      limite: 500.00, 
+      historico: [] 
+    },
+
+    { 
+      numero: 1002, 
+      titular: "Maria Souza", 
+      tipo: "poupanca", 
+      saldo: 3200.00, 
+      limite: 0, 
+      historico: [] 
+    },
+
+    { 
+      numero: 1003, 
+      titular: "Carlos Lima", 
+      tipo: "corrente", 
+      saldo: 800.00, 
+      limite: 300.00, 
+      historico: [] 
+    }
+];
+
+let contaAtiva = contas[0];
 
 // ========== 2. MENU DE OPERAÇÕES ==========
 
@@ -35,31 +57,37 @@ const operacoes = {
 function exibirMenu() {
     console.log("\n=================================");
     console.log("    BANKSIM - BANCO DIGITAL");
-    console.log("===================================");
-    console.log(`Conta: ${conta.numero}`);
-    console.log(`Titular: ${conta.titular}`);
+    console.log("=================================");
+    console.log(`Conta: ${contaAtiva.numero}`);
+    console.log(`Titular: ${contaAtiva.titular}`);
     console.log("---------------------------------");
     console.log(`${operacoes.CONSULTAR_SALDO} - Consultar saldo`);
     console.log(`${operacoes.DEPOSITAR} - Realizar depósito`);
     console.log(`${operacoes.SACAR} - Realizar saque`);
     console.log(`${operacoes.EXTRATO} - Exibir extrato`);
+    console.log(`${operacoes.FILTRAR} - Filtrar movimentações`);
+    console.log(`${operacoes.TRANSFERIR} - Transferir`);
+    console.log(`${operacoes.DESFAZER_ULTIMA_MOVIMENTACAO} - Desfazer última movimentação`);
+    console.log(`${operacoes.CRIAR_CONTA} - Criar conta`);
+    console.log(`${operacoes.EXCLUIR_CONTA} - Excluir conta`);
     console.log(`${operacoes.ENCERRAR} - Encerrar sistema`);
     console.log("=================================");
 }
 
-function consultarSaldo() {
-    // IMPLEMENTAR:
-    // Exibir saldo e limite disponível.
+function buscarContaPorNumero(numero) {
+    return contas.find(c => c.numero === numero);
+}
 
-    console.log("O seu saldo é de R$", conta.saldo);
-    console.log("O seu limite é de R$", conta.limite);
+function consultarSaldo() {
+    console.log("O seu saldo é de R$", contaAtiva.saldo);
+    console.log("O seu limite é de R$", contaAtiva.limite);
 }
 
 function realizarDeposito(valor) {
     if (Number.isFinite(valor) && valor > 0) {
-        conta.saldo += valor;
-        registrarMovimentacao("Depósito", valor);
-        console.log("O seu novo saldo é de: R$", conta.saldo);
+        contaAtiva.saldo += valor;
+        registrarMovimentacao(contaAtiva, "Depósito", valor);
+        console.log("O seu novo saldo é de: R$", contaAtiva.saldo);
     } else {
         console.log("Você não pode depositar um valor igual a 0 ou menor.");
     }
@@ -71,45 +99,90 @@ function realizarSaque(valor) {
         return;
     }
 
-    if (valor > conta.saldo + conta.limite) {
+    if (valor > contaAtiva.saldo + contaAtiva.limite) {
         console.log("Saldo e limite insuficientes.");
         return;
     }
 
-    conta.saldo -= valor;
-    registrarMovimentacao("Saque", valor);
-    console.log("O novo saldo é de: R$", conta.saldo);
+    contaAtiva.saldo -= valor;
+    registrarMovimentacao(contaAtiva, "Saque", valor);
+    console.log("O novo saldo é de: R$", contaAtiva.saldo);
 }
 
 function exibirExtrato() {
-    // IMPLEMENTAR:
-    // Percorrer o histórico e exibir as movimentações.
-
     console.log("\n====== EXTRATO ======");
 
-    if (conta.historico.length === 0) {
+    if (contaAtiva.historico.length === 0) {
         console.log("Nenhuma movimentação registrada.");
         return;
     }
 
-    conta.historico.forEach(item => {
+    contaAtiva.historico.forEach(item => {
         console.log(`${item.data} | ${item.tipo} | R$ ${item.valor.toFixed(2)}`);
     });
 }
 
-function registrarMovimentacao(tipo, valor) {
-    // IMPLEMENTAR:
-    // Criar um objeto com tipo, valor e data.
-    // Adicionar o objeto ao histórico.
-
-    const movimentacao = {
+// Agora recebe a conta, pois a transferência registra em duas contas.
+function registrarMovimentacao(conta, tipo, valor) {
+    conta.historico.push({
         tipo: tipo,
         valor: valor,
         data: new Date().toLocaleString('pt-BR'),
+    });
+}
+
+// ========== 4. A IMPLEMENTAR ==========
+
+// Exibe só as movimentações da conta ativa que atendem ao critério (ex: tipo).
+// function filtrarMovimentacoes(conta, tipo) {
+//     let movimentacaoFiltrada = {};
+
+//     if (conta.historico.length === 0) {
+//         console.log("A lista está vazia");
+//         return;
+//     }
+
+//     movimentacaoFiltrada = conta.historico.filter(n => n.tipo === tipo);
+
+//     movimentacaoFiltrada.forEach(n => {
+//         console.log(`${n.data} | ${n.tipo} | R$ ${n.valor.toFixed(2)}`);
+//     });
+// }
+
+function filtrarMovimentacoes(conta, tipo) {
+    const movimentacaoFiltrada = conta.historico.filter(n => n.tipo === tipo);
+
+    if (movimentacaoFiltrada.length === 0) {
+        console.log("Nenhuma movimentação do tipo", tipo, "encontrada.");
+        return;
     }
 
-    conta.historico.push(movimentacao);
+    movimentacaoFiltrada.forEach(n => {
+        console.log(`${n.data} | ${n.tipo} | R$ ${n.valor.toFixed(2)}`);
+    });
 }
+
+// Move valor da conta de origem para a de destino e registra nas duas.
+function transferir(numeroOrigem, numeroDestino, valor) {
+    // TODO
+}
+
+// Remove a última movimentação da conta ativa e reverte o saldo.
+function desfazerUltimaMovimentacao() {
+    // TODO
+}
+
+// Adiciona uma nova conta ao array "contas".
+function criarConta(titular, tipo, saldoInicial) {
+    // TODO
+}
+
+// Remove a conta do array "contas".
+function excluirConta(numero) {
+    // TODO
+}
+
+// ========== 5. PROCESSAMENTO DAS OPERAÇÕES ==========
 
 function processarOperacao(opcao) {
     switch (opcao) {
@@ -129,6 +202,27 @@ function processarOperacao(opcao) {
             exibirExtrato();
             break;
 
+        case operacoes.FILTRAR:
+            filtrarMovimentacoes(contaAtiva, "Depósito");
+            filtrarMovimentacoes(contaAtiva, "Saque");
+            break;
+
+        case operacoes.TRANSFERIR:
+            
+            break;
+
+        case operacoes.DESFAZER_ULTIMA_MOVIMENTACAO:
+            
+            break;
+
+        case operacoes.CRIAR_CONTA:
+            
+            break;
+
+        case operacoes.EXCLUIR_CONTA:
+            
+            break;
+
         case operacoes.ENCERRAR:
             console.log("Encerrando o BankSim...");
             break;
@@ -138,16 +232,13 @@ function processarOperacao(opcao) {
     }
 }
 
-// ========== 4. EXECUÇÃO DO SISTEMA ==========
+// ========== 6. EXECUÇÃO DO SISTEMA ==========
 
 function iniciarSistema() {
-    // processarOperacao(0);
-    // processarOperacao(1);
-    // processarOperacao(2);
-    // processarOperacao(3);
-    // processarOperacao(4);
-}
-
-// ========== 5. INICIALIZAÇÃO ==========
+    processarOperacao(operacoes.DEPOSITAR);
+    processarOperacao(operacoes.SACAR);
+    // processarOperacao(operacoes.EXTRATO);
+    // processarOperacao(operacoes.FILTRAR)
+}   
 
 iniciarSistema();
