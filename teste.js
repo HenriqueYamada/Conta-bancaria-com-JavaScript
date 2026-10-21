@@ -4,9 +4,7 @@
  * Objetivo: praticar lógica de programação.
  */
 
-// ==========================================
-// 1. DADOS DA CONTA
-// ==========================================
+// ========== 1. DADOS DA CONTA ==========
 
 const conta = {
     numero: 1001,
@@ -17,9 +15,7 @@ const conta = {
     historico: []
 };
 
-// ==========================================
-// 2. MENU DE OPERAÇÕES
-// ==========================================
+// ========== 2. MENU DE OPERAÇÕES ==========
 
 const operacoes = {
     CONSULTAR_SALDO: 1,
@@ -29,14 +25,12 @@ const operacoes = {
     ENCERRAR: 0
 };
 
-// ==========================================
-// 3. FUNÇÕES DO SISTEMA
-// ==========================================
+// ========== 3. FUNÇÕES DO SISTEMA ==========
 
 function exibirMenu() {
     console.log("\n=================================");
-    console.log("       BANKSIM - BANCO DIGITAL");
-    console.log("=================================");
+    console.log("    BANKSIM - BANCO DIGITAL");
+    console.log("===================================");
     console.log(`Conta: ${conta.numero}`);
     console.log(`Titular: ${conta.titular}`);
     console.log("---------------------------------");
@@ -51,21 +45,35 @@ function exibirMenu() {
 function consultarSaldo() {
     // IMPLEMENTAR:
     // Exibir saldo e limite disponível.
+
+    console.log("O seu saldo é de R$", conta.saldo);
+    console.log("O seu limite é de R$", conta.limite);
 }
 
 function realizarDeposito(valor) {
-    // IMPLEMENTAR:
-    // Validar o valor.
-    // Atualizar o saldo.
-    // Registrar a movimentação no histórico.
+    if (Number.isFinite(valor) && valor > 0) {
+        conta.saldo += valor;
+        console.log("O seu novo saldo é de: R$", conta.saldo);
+    } else {
+        console.log("Você não pode depositar um valor igual a 0 ou menor.");
+    }
 }
 
 function realizarSaque(valor) {
-    // IMPLEMENTAR:
-    // Validar o valor.
-    // Verificar saldo e limite disponível.
-    // Atualizar os valores.
-    // Registrar a movimentação no histórico.
+    if (Number.isFinite(valor) && valor > -1) {
+        if (conta.saldo > valor) {
+            if (conta.limite > valor) {
+                conta.saldo -= valor;
+                console.log("O novo saldo é de: R$", conta.saldo);
+            } else {
+                console.log("Você não pode sacar um valor maior que o que está no seu limite.");    
+            }
+        } else {
+            console.log("Você não pode sacar um valor menor que o que está no seu saldo.");
+        }
+    } else {
+        console.log("Você não pode sacar um valor igual a 0 ou menor.");
+    }
 }
 
 function exibirExtrato() {
@@ -86,15 +94,15 @@ function processarOperacao(opcao) {
             break;
 
         case operacoes.DEPOSITAR:
-            // IMPLEMENTAR: obter o valor do depósito.
+            realizarDeposito(725);
             break;
 
         case operacoes.SACAR:
-            // IMPLEMENTAR: obter o valor do saque.
+            realizarSaque(200);
             break;
 
         case operacoes.EXTRATO:
-            exibirExtrato();
+            
             break;
 
         case operacoes.ENCERRAR:
@@ -106,21 +114,15 @@ function processarOperacao(opcao) {
     }
 }
 
-// ==========================================
-// 4. EXECUÇÃO DO SISTEMA
-// ==========================================
+// ========== 4. EXECUÇÃO DO SISTEMA ==========
 
 function iniciarSistema() {
-    // IMPLEMENTAR:
-    // 1. Repetir o menu enquanto necessário.
-    // 2. Obter a opção escolhida pelo usuário.
-    // 3. Converter a entrada para número.
-    // 4. Chamar processarOperacao(opcao).
-    // 5. Encerrar quando a opção for 0.
+    // processarOperacao(0);
+    // processarOperacao(1);
+    // processarOperacao(2);
+    processarOperacao(3);
 }
 
-// ==========================================
-// 5. INICIALIZAÇÃO
-// ==========================================
+// ========== 5. INICIALIZAÇÃO ==========
 
-// IMPLEMENTAR: iniciar o sistema.
+iniciarSistema();
